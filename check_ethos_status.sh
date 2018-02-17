@@ -22,3 +22,4 @@ do
 		echo good
 	fi
 done
+	rm edtmp.json
