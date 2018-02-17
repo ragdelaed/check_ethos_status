@@ -17,7 +17,7 @@ do
 
 	if [ "$live_gpus" -lt "$total_gpus" ];
 	then
-		echo 'degraded gpus detected for http://'$site'.ethosdistro.com'|mail -s 'degraded gpus' '6786306112@vtext.com'
+		echo 'degraded gpus detected for '$site''|mail -s $site '6786306112@vtext.com'
 	else
 		echo good
 	fi
