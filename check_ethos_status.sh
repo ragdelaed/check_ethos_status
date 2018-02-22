@@ -14,7 +14,6 @@ do
 		rack_loc=$(cat edtmp.json |jshon -e rigs -e $rig -e rack_loc|sed s'/"//g')
 		if [[ "$condition" != "mining" ]];
 		then
-			#echo 'degraded gpus detected for '$site''|mail -s $site '6786306112@vtext.com'
 			echo $site/$rack_loc,$miner_instance/$gpus|mail -s $site '6786306112@vtext.com'
 		fi
 
