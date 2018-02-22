@@ -4,22 +4,20 @@ sites="6af48c dlirzc"
 
 for site in $(echo $sites)
 do
-	echo checking $site
-	rm edtmp.json
 	wget --quiet -O edtmp.json http://$site.ethosdistro.com/?json=yes
-	sleep 1
-	total_gpus=$(cat edtmp.json |sed 's/,/\n/g'|grep gpus|grep per|grep total|cut -f 2 -d :)
-	live_gpus=$(cat edtmp.json |sed 's/,/\n/g'|grep gpus|grep per|grep live|cut -f 2 -d :)
-	if [ "$live_gpus" = "null" ];
-	then
-		live_gpus=0
-	fi
+	rigs=$(cat edtmp.json |jshon -e rigs -k)
+	for rig in $(echo $rigs)
+	do
+		condition=$(cat edtmp.json |jshon -e rigs -e $rig -e condition|sed s'/"//g')
+		gpus=$(cat edtmp.json |jshon -e rigs -e $rig -e gpus|sed s'/"//g')
+		miner_instance=$(cat edtmp.json |jshon -e rigs -e $rig -e miner_instance|sed s'/"//g')
+		rack_loc=$(cat edtmp.json |jshon -e rigs -e $rig -e rack_loc|sed s'/"//g')
+		if [[ "$condition" != "mining" ]];
+		then
+			#echo 'degraded gpus detected for '$site''|mail -s $site '6786306112@vtext.com'
+			echo $site/$rack_loc,$miner_instance/$gpus|mail -s $site '6786306112@vtext.com'
+		fi
 
-	if [ "$live_gpus" -lt "$total_gpus" ];
-	then
-		echo 'degraded gpus detected for '$site''|mail -s $site '6786306112@vtext.com'
-	else
-		echo good
-	fi
+	done
 done
 	rm edtmp.json
