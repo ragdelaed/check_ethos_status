@@ -14,7 +14,8 @@ do
 		rack_loc=$(cat edtmp.json |jshon -e rigs -e $rig -e rack_loc|sed s'/"//g')
 		if [[ "$condition" != "mining" ]];
 		then
-			echo $site/$rack_loc,$miner_instance/$gpus|mail -s $site '6786306112@vtext.com'
+			echo $site/$rack_loc,$miner_instance/$gpus/$condition|mail -s $site '6786306112@vtext.com'
+			logger $site/$rack_loc,$miner_instance/$gpus/$condition
 		fi
 
 	done
